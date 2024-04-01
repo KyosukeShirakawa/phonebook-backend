@@ -26,8 +26,9 @@ let persons = [
   }
 ]
 
-app.get('/', (request, response) => {
-  response.send('<h1>Hello World</h1>')
+app.get('/info', (request, response) => {
+  const currentDate = new Date()
+  response.send(`<p>Phonebook has info for 2 people</p><p>${currentDate}</p>`)
 })
 
 app.get('/api/persons', (request, response) => {
@@ -53,10 +54,10 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 const generateId = () => {
-  const maxId = persons.length > 0
-    ? Math.max(...persons.map(p => p.id))
-    : 0
-  return maxId + 1
+  const randomNum = Math.random().toString(36).substring(2, 9)
+
+
+  return randomNum
 }
 
 app.post('/api/persons', (request, response) => {
@@ -70,6 +71,10 @@ app.post('/api/persons', (request, response) => {
     return response.status(400).json({
       error: 'number missing'
     })
+  } else if(persons.find(p => p.name ===body.name)){
+    return response.status(400).json({
+      error: 'name must be unique'
+    })
   }
 
   const person = {
@@ -79,7 +84,7 @@ app.post('/api/persons', (request, response) => {
   }
 
   persons = persons.concat(person)
-  
+
   response.json(person)
 })
 
