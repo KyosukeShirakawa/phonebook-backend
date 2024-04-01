@@ -1,7 +1,28 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
+const logger = morgan('tiny')
+
 
 app.use(express.json())
+app.use(morgan('tiny'))
+
+
+
+// morgan.token('json', function(req, res) {
+//   return JSON.stringify({
+//     id: req.id,
+//     name: req.name,
+//     number: req.number
+//   })
+// })
+
+
+
+// morgan.token('param', function(req, res, param) {
+//   return req.params[param]
+// })
+
 
 let persons = [
   { 
@@ -25,6 +46,8 @@ let persons = [
     "number": "39-23-6423122"
   }
 ]
+
+
 
 app.get('/info', (request, response) => {
   const currentDate = new Date()
@@ -87,6 +110,9 @@ app.post('/api/persons', (request, response) => {
 
   response.json(person)
 })
+
+
+
 
 const PORT = 3001
 app.listen(PORT)
